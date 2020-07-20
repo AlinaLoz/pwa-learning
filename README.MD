@@ -1,9 +1,40 @@
-# Progressive Web Apps - Complete Guide
-This source code is part of Maximilian Schwarzmüller's "Progressive Web Apps - Complete Guide" course on udemy.com.
+# Стратегии кеширования
 
-# How to Use
-You need [Node.js](https://nodejs.org) installed on your machine. Simply download the installer from [nodejs.org](https://nodejs.org) and go through the installation steps.
+## Cache with network fallback
 
-Once Node.js is installed, open your command prompt or terminal and **navigate into this project folder**. There, run `npm install` to install all required dependencies.
+1. приходит запрос
+2. если есть в кеше, берем из кеша
+3. кеше нет, делаем запрос.
+4. запрос успешный, отдаем+добавляеи в динамический кеш
+5. если ошибка, то показываем страницы оффлайн
 
-Finally, run `npm start` to start the development server and visit [localhost:8080](http://localhost:8080) to see the running application.
+#### Преимущества:
+<ul>
+<li>Кешируем все что можно</li>
+</ul>
+
+#### Недостатки:
+<ul>
+<li>При вызове фетч, если в кэше есть данные, то юзер получает устаревшие данные. </li>
+</ul>
+
+## Cache-only
+Все всегда берется из кеша, нет динамического кеша. Те мы получаем только те файлы, которые включены в App Shell.
+
+## Network-only
+Все всегда берется из сети. Те по сути у нас есть сервис воркер, но мы не работает с кешем.
+
+## Network with сache fallback
+1. приходит запрос
+2. делаем запрос
+3. если успешно, то возвращаем + кладем в диначимеский кеш
+4. если запрос зафэйлился, то берем из кеша
+#### Преимущества:
+<ul>
+<li>Всегда получаем актулаьные данные</li>
+</ul>
+
+#### Недостатки:
+<ul>
+<li>Используем кеш только тогда, когда у нас нет соединения.</li>
+</ul>
