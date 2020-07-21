@@ -39,19 +39,27 @@ const handleClickCartButton = async (e) => {
   // await cache.add('https://httpbin.org/get');
 };
 
-function createCard() {
+const clearSharedMomentsArea = () => {
+  while(sharedMomentsArea.hasChildNodes()) {
+    sharedMomentsArea.removeChild(sharedMomentsArea.lastChild);
+  }
+};
+
+function createCard(data) {
+  console.log('createCard', data);
+
   var cardWrapper = document.createElement('div');
   cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
   var cardTitle = document.createElement('div');
   cardTitle.className = 'mdl-card__title';
-  cardTitle.style.backgroundImage = 'url("/src/images/sf-boat.jpg")';
+  cardTitle.style.backgroundImage = `url("${data.image}")`;
   cardTitle.style.backgroundSize = 'cover';
   cardTitle.style.height = '180px';
   cardWrapper.appendChild(cardTitle);
   var cardTitleTextElement = document.createElement('h2');
   cardTitleTextElement.style.color = 'white';
   cardTitleTextElement.className = 'mdl-card__title-text';
-  cardTitleTextElement.textContent = 'San Francisco Trip';
+  cardTitleTextElement.textContent = data.title;
   cardTitle.appendChild(cardTitleTextElement);
   var cardSupportingText = document.createElement('div');
   cardSupportingText.className = 'mdl-card__supporting-text';
@@ -68,10 +76,22 @@ function createCard() {
   sharedMomentsArea.appendChild(cardWrapper);
 }
 
-fetch('https://httpbin.org/get')
-  .then(function(res) {
-    return res.json();
-  })
-  .then(function(data) {
-    createCard();
-  });
+const url = 'https://pwa-teach.firebaseio.com/posts/xVrS9YzrhL4khR9dQZKd.json';
+
+(async () => {
+  if (!caches in window) { return; }
+  let cache = await caches.match(url);
+  if (!cache) { return; }
+  cache = await cache.json();
+  clearSharedMomentsArea();
+  createCard(cache);
+  console.log('feed from web', cache);
+})();
+
+(async () => {
+  let cache =  await fetch(url);
+  cache = await cache.json();
+  clearSharedMomentsArea();
+  createCard(cache);
+  console.log('feed from cache', cache);
+})();
