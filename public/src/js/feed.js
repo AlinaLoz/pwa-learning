@@ -46,8 +46,6 @@ const clearSharedMomentsArea = () => {
 };
 
 function createCard(data) {
-  console.log('createCard', data);
-
   var cardWrapper = document.createElement('div');
   cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
   var cardTitle = document.createElement('div');
@@ -76,22 +74,25 @@ function createCard(data) {
   sharedMomentsArea.appendChild(cardWrapper);
 }
 
-const url = 'https://pwa-teach.firebaseio.com/posts/xVrS9YzrhL4khR9dQZKd.json';
+const url = 'https://pwa-teach.firebaseio.com/posts/coolections.json';
 
 (async () => {
   if (!caches in window) { return; }
   let cache = await caches.match(url);
   if (!cache) { return; }
   cache = await cache.json();
+  console.log('cache', cache);
+
   clearSharedMomentsArea();
+  
   createCard(cache);
-  console.log('feed from web', cache);
+  console.log('feed from cache', cache);
 })();
 
 (async () => {
-  let cache =  await fetch(url);
+  let cache = await fetch(url);
   cache = await cache.json();
   clearSharedMomentsArea();
   createCard(cache);
-  console.log('feed from cache', cache);
+  console.log('feed from web', cache);
 })();

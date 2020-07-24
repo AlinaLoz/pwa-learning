@@ -1,5 +1,28 @@
-var CACHE_STATIC_NAME = 'static-v17';
+importScripts('/src/js/idb.js');
+importScripts('/src/js/idb.wrapper.js');
+
+var CACHE_STATIC_NAME = 'static-v30';
 var CACHE_DYNAMIC_NAME = 'dynamic-v3';
+
+var STATIC_FILES = [
+  '/',
+  '/index.html',
+  '/offline.html',
+  '/src/js/app.js',
+  '/src/js/feed.js',
+  '/src/js/promise.js',
+  '/src/js/fetch.js',
+  '/src/js/material.min.js',
+  '/src/css/app.css',
+  '/src/css/feed.css',
+  '/src/images/main-image.jpg',
+  'https://fonts.googleapis.com/css?family=Roboto:400,700',
+  'https://fonts.googleapis.com/icon?family=Material+Icons',
+  'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
+];
+
+console.log('hehehehe');
+console.log('idb', idb);
 
 self.addEventListener('install', function(event) {
   console.log('[Service Worker] Installing Service Worker ...', event);
@@ -12,6 +35,7 @@ self.addEventListener('install', function(event) {
           '/index.html',
           '/offline.html',
           '/src/js/app.js',
+          '/src/js/idb.js',
           '/src/js/feed.js',
           '/src/js/material.min.js',
           '/src/css/app.css',
@@ -105,19 +129,36 @@ network with cache fallback
   * 
   * 
   */
+
+ function isInArray(string, array) {
+  for (const item of array) {
+    if (item === string) {
+      return true;
+    }
+    return false;
+  }
+}
  self.addEventListener('fetch', function (event) {
 
-  var url = 'https://httpbin.org/get';
-  if (event.request.url.indexOf(url) > -1) {
+  var url = 'https://pwa-teach.firebaseio.com/posts/coolections.json';
+
+  console.log('dasdas', event.request.url);
+
+  if (event.request.url === url) {
+    console.log('inside');
     event.respondWith(
-      caches.open(CACHE_DYNAMIC_NAME)
-        .then(function (cache) {
-          return fetch(event.request)
-            .then(function (res) {
-              cache.put(event.request, res.clone());
-              return res;
-            });
-        })
+      fetch(event.request)
+      .then((resp) => {
+        const clonedResp = resp.clone();
+        clonedResp.json()
+        .then((data) => {
+          const transformData = Object.values(data);
+          for (item of transformData) {
+            (async (info) => writeData('posts', info))(item);
+          }
+        });
+        return resp;
+      }).catch(err => console.log('eewqwe', err))
     );
   } else if (isInArray(event.request.url, STATIC_FILES)) {
     event.respondWith(
