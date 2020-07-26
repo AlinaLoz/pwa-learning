@@ -9,5 +9,13 @@ var writeData = (st, info) => {
         const store = trx.objectStore(st);
         store.put(info);  
         return trx.complete;  
-      });;
+      });
 }
+
+var readIdbData = (st) => {
+    return idbInst.then((db) => {
+        const trx = db.transaction(st, 'readonly'); 
+        const store = trx.objectStore(st);
+        return store.getAll();
+    });
+};

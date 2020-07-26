@@ -76,23 +76,23 @@ function createCard(data) {
 
 const url = 'https://pwa-teach.firebaseio.com/posts/coolections.json';
 
-(async () => {
-  if (!caches in window) { return; }
-  let cache = await caches.match(url);
-  if (!cache) { return; }
-  cache = await cache.json();
-  console.log('cache', cache);
-
+const updateUI = (items) => {
+  console.log('updateUI');
   clearSharedMomentsArea();
-  
-  createCard(cache);
-  console.log('feed from cache', cache);
+  for (let item of items) {
+    createCard(item);
+  }
+};
+
+(async () => {
+  const posts = await readIdbData('posts');
+  updateUI(Object.values(posts));
+  console.log('feed from indexdb', posts);
 })();
 
 (async () => {
-  let cache = await fetch(url);
-  cache = await cache.json();
-  clearSharedMomentsArea();
-  createCard(cache);
-  console.log('feed from web', cache);
+  let response = await fetch(url);
+  response = await response.json();
+  updateUI(Object.values(response));
+  console.log('feed from web', response);
 })();
