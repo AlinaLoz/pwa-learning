@@ -155,7 +155,7 @@ network with cache fallback
               (async (data) => {
                 writeData('posts', data)
                 .then(async() => {
-                  await clearItemById('posts', data.id);
+                  clearItemById('posts', data.id);
                 });
               })(item);
             }
