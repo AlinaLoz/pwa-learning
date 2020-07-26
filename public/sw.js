@@ -139,26 +139,31 @@ network with cache fallback
   }
 }
  self.addEventListener('fetch', function (event) {
-
   var url = 'https://pwa-teach.firebaseio.com/posts/coolections.json';
 
-  console.log('dasdas', event.request.url);
-
   if (event.request.url === url) {
-    console.log('inside');
+    console.log('1');
     event.respondWith(
       fetch(event.request)
       .then((resp) => {
         const clonedResp = resp.clone();
-        clonedResp.json()
-        .then((data) => {
-          const transformData = Object.values(data);
-          for (item of transformData) {
-            (async (info) => writeData('posts', info))(item);
-          }
-        });
+        clearAll('posts').then((clearResp) => { 
+          clonedResp.json()
+          .then((data) => {
+            const transformData = Object.values(data);
+            for (item of transformData) {
+              (async (data) => {
+                writeData('posts', data)
+                .then(async() => {
+                  await clearItemById('posts', data.id);
+                });
+              })(item);
+            }
+          });
+          
+        })
         return resp;
-      }).catch(err => console.log('eewqwe', err))
+      }).catch(err => console.log('err', err))
     );
   } else if (isInArray(event.request.url, STATIC_FILES)) {
     event.respondWith(

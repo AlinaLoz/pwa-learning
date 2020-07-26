@@ -19,3 +19,21 @@ var readIdbData = (st) => {
         return store.getAll();
     });
 };
+
+var clearAll = (st) => {
+    return idbInst.then(async (db) => {
+        const trx = db.transaction(st, 'readwrite'); 
+        const store = trx.objectStore(st);
+        await store.clear();
+        return trx.complete; 
+    });
+};
+
+var clearItemById = (st, id) => {
+    return idbInst.then(async (db) => {
+        const trx = db.transaction(st, 'readwrite'); 
+        const store = trx.objectStore(st);
+        await store.delete(id);
+        return trx.complete; 
+    }).then(() => console.log('item deleted'));
+};

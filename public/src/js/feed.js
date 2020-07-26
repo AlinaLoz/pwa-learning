@@ -85,9 +85,11 @@ const updateUI = (items) => {
 };
 
 (async () => {
+  console.log('readIdbData', readIdbData);
   const posts = await readIdbData('posts');
   updateUI(Object.values(posts));
   console.log('feed from indexdb', posts);
+  isRequestCompleted = true;
 })();
 
 (async () => {
@@ -95,4 +97,5 @@ const updateUI = (items) => {
   response = await response.json();
   updateUI(Object.values(response));
   console.log('feed from web', response);
+  isRequestCompleted = true;
 })();
