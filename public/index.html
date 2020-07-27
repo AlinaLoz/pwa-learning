@@ -65,7 +65,7 @@
     </div>
     <main class="mdl-layout__content mat-typography">
       <div id="create-post">
-        <form>
+        <form id="create-post-form">
           <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="text" id="title">
             <label class="mdl-textfield__label" for="title" name="title">Title</label>
@@ -77,7 +77,7 @@
           <br>
           <div>
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
-                    type="submit" id="post-btn">Post!
+              type="submit" id="post-btn">Post!
             </button>
           </div>
           <br>
@@ -108,10 +108,11 @@
     </main>
   </div>
 </div>
-<script defer src="/src/js/material.min.js"></script>
+<script src="/src/js/material.min.js"></script>
 <script src="/src/js/app.js"></script>
 <script src="/src/js/idb.js"></script>
 <script src="/src/js/idb.wrapper.js"></script>
 <script src="/src/js/feed.js"></script>
+<script src="/src/js/handle-post-form.js"></script>
 </body>
 </html>

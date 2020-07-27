@@ -1,6 +1,8 @@
 var idbInst = idb.open('pwa-test', 1, (db) => {
     if (db.objectStoreNames.contains('posts')) { return; }
     db.createObjectStore('posts', { keyPath: 'id' });
+    if (db.objectStoreNames.contains('sync-posts')) { return; }
+    db.createObjectStore('sync-posts', { keyPath: 'id' });
 });
 
 var writeData = (st, info) => {

@@ -5,6 +5,7 @@ var createPostArea = document.querySelector('#create-post');
 var closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
 var sharedMomentsArea = document.querySelector('#shared-moments');
 
+
 function openCreatePostModal() {
   createPostArea.style.display = 'block';
   if (deferredPrompt) {
@@ -61,7 +62,7 @@ function createCard(data) {
   cardTitle.appendChild(cardTitleTextElement);
   var cardSupportingText = document.createElement('div');
   cardSupportingText.className = 'mdl-card__supporting-text';
-  cardSupportingText.textContent = 'In San Francisco';
+  cardSupportingText.textContent = data.location;
   cardSupportingText.style.textAlign = 'center';
   
   const cartButton = document.createElement('document');
@@ -85,7 +86,6 @@ const updateUI = (items) => {
 };
 
 (async () => {
-  console.log('readIdbData', readIdbData);
   const posts = await readIdbData('posts');
   updateUI(Object.values(posts));
   console.log('feed from indexdb', posts);

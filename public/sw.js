@@ -197,3 +197,35 @@ network with cache fallback
     );
   }
 });
+
+self.addEventListener('sync', async (event) => {
+  console.log('[Service worker].sync event.', event);
+
+  if (event.tag === 'sync-posts') {
+    event.waitUntil(
+      readIdbData('sync-posts')
+        .then(async (posts) => {
+          for (post of posts) {
+            (async (info) => {
+              try {
+                let resp = await fetch('https://pwa-teach.firebaseio.com/posts/coolections.json', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                  },
+                  body: JSON.stringify(post),
+                });
+                if (resp.ok) {
+                  console.log('info.id', info.id);
+                  await clearItemById('sync-posts', info.id);
+                }
+              } catch(err) {
+                console.log('err to sync post', err);
+              }
+            })(post);
+          }
+        })
+    );
+  }
+});

@@ -1,3 +1,5 @@
+var deferredPrompt;
+
 (async () => {
   if (!'serviceWorker' in navigator) { return; }
   try {
@@ -7,3 +9,11 @@
     console.log(err);
   }
 })();
+
+
+window.addEventListener('beforeinstallprompt', function(event) {
+  console.log('beforeinstallprompt fired');
+  event.preventDefault();
+  deferredPrompt = event;
+  return false;
+});
