@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/idb.wrapper.js');
 
-var CACHE_STATIC_NAME = 'static-v30';
+var CACHE_STATIC_NAME = 'static-v37';
 var CACHE_DYNAMIC_NAME = 'dynamic-v3';
 
 var STATIC_FILES = [
@@ -199,6 +199,7 @@ network with cache fallback
 });
 
 self.addEventListener('sync', async (event) => {
+
   console.log('[Service worker].sync event.', event);
 
   if (event.tag === 'sync-posts') {
@@ -228,4 +229,31 @@ self.addEventListener('sync', async (event) => {
         })
     );
   }
+});
+
+self.addEventListener('notificationclick', (event) => {
+  console.log('qwerty');
+  const notification = event.notification;
+  const action = event.action;
+
+  if (action === 'confirm') {
+    console.log('1');
+  } else {
+    console.log('2');
+  }
+  // notification.close();
+});
+
+
+self.addEventListener('push', (event) => {
+  console.log('pushEvent', event.data);
+  
+  let options = { title: 'self.addEventListener(push' };
+  if (event.data) {
+    options = JSON.parse(event.data.text());
+  }
+  
+  event.waitUntil(
+    self.registration.showNotification(options.title, options)
+  );  
 });
