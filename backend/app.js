@@ -9,6 +9,7 @@ const app = express();
 app.use(
   cors({
     origin(origin, cb) {
+        console.log('jkhkhj')
       cb(null, true);
     },
     credentials: true

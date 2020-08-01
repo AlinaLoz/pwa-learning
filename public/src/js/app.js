@@ -4,7 +4,7 @@ var notificationButtons = document.querySelectorAll('.enable-notifications');
 (async () => {
   if (!'serviceWorker' in navigator) { return; }
   try {
-    await navigator.serviceWorker.register('/sw.js');
+    // await navigator.serviceWorker.register('/sw.js');
     console.log('Service worker registered!');
   } catch(err) {
     console.log(err);
@@ -62,7 +62,7 @@ function configurePubSub() {
       }
     }).then(async (subscription) => {
       console.log('subscription', subscription);
-      let result = await fetch('http://localhost:3002/subscription', {
+      let result = await fetch('https://9eb47dd7a989.ngrok.io:3002/subscription', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -78,16 +78,19 @@ function configurePubSub() {
 }
 
 function askForNotificationPermission() {
-  alert('askForNotificationPermission');
+  console.log('askForNotificationPermission');
   Notification.requestPermission((resp) => {
     if (resp != 'granted') {
       console.log('not send push notify');
     } else {
-      configurePubSub();
-      // dispalyNotification();
+      // configurePubSub();
+      dispalyNotification();
     }
   });
 }
+
+console.log('notificattion', 'Notification' in window);
+console.log('serviceWorker', 'serviceWorker' in navigator);
 
 if ('Notification' in window && 'serviceWorker' in navigator) {
   for (const notifyItem of notificationButtons) {

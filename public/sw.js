@@ -232,7 +232,6 @@ self.addEventListener('sync', async (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-  console.log('qwerty');
   const notification = event.notification;
   const action = event.action;
 
@@ -252,7 +251,7 @@ self.addEventListener('push', (event) => {
   if (event.data) {
     options = JSON.parse(event.data.text());
   }
-  
+
   event.waitUntil(
     self.registration.showNotification(options.title, options)
   );  
