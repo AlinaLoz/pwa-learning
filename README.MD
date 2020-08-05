@@ -1,3 +1,5 @@
+стратегии воркбокса-https://webformyself.com/5-strategij-keshirovaniya-service-worker-dlya-prilozheniya-pwa/
+
 # Стратегии кеширования
 
 ## Cache with network fallback
